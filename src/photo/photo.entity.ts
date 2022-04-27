@@ -38,7 +38,7 @@ export class Photo extends BaseEntity {
   })
   status: photoStatus;
 
-  @ManyToOne(() => User, (user) => user.photos)
+  @ManyToOne(() => User, (user) => user.photos, {onDelete: 'CASCADE'})
   user: User;
 
   @ManyToOne(() => Album, (album) => album.photos)

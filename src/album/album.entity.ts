@@ -41,7 +41,9 @@ export class Album extends BaseEntity {
   })
   status: albumStatus;
 
-  @OneToMany(() => Photo, (photo) => photo.user)
+  @OneToMany(() => Photo, (photo) => photo.user, {
+    cascade: true
+  })
   photos: Photo[];
 
   @ManyToMany(() => User)

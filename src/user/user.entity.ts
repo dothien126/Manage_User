@@ -53,7 +53,9 @@ export class User {
   })
   status: userStatus;
 
-  @OneToMany(() => Photo, (photo) => photo.user)
+  @OneToMany(() => Photo, (photo) => photo.user, {
+    cascade: true
+  })
   photos?: Photo[];
 
   hashPassword() {
