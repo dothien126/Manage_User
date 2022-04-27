@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec npx ts-node src/app.ts "
+    "dev": "ts-node-dev src/app.ts "
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -30,6 +30,7 @@
     "chai": "^4.3.6",
     "dotenv": "^16.0.0",
     "mocha": "^9.2.2",
+    "morgan": "^1.10.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.7.0",
     "tsc-files": "^1.1.3",

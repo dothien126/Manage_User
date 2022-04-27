@@ -4,18 +4,39 @@ import path from 'path';
 
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import morgan from 'morgan';
 import express from 'express';
 import helmet from 'helmet';
-import morgan from 'morgan';
+
 import { dbCreateConnection } from './orm/dbConnection';
+import './utils/response/customSuccess';
+import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
 
 // use middle ware
 app.use(cors());
+app.use(morgan('dev'));
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+
+// home page
+app.get('/home', (req, res, next) => {
+  res
+    .status(200)
+    .setHeader('Content-Type', 'text/html')
+    .send(`<h4>💀👻 Welcome to my project 👻💀</h4>`);
+});
+
+// catch route is not valid
+app.get('*', (req, res, next) => {
+  return res.status(404).json('404 Not Found');
+});
+
+// catch error
+app.use(errorHandler);
 
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
