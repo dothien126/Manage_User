@@ -1,13 +1,14 @@
+import { timeLog } from 'console';
 import {
   Entity,
   BaseEntity,
   Column,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
   JoinTable,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
 import { User } from '../user/user.entity';
@@ -19,7 +20,7 @@ export enum albumStatus {
 
 @Entity('album')
 export class Album extends BaseEntity {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
@@ -28,13 +29,11 @@ export class Album extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({name: 'created_at', type: 'timestamp'})
+  createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({name: 'updated_at', type: 'timestamp', nullable: true})
+  updatedAt?: Date;
 
   @Column({
     type: 'enum',

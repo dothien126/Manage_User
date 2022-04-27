@@ -2,7 +2,7 @@ import {
   Entity,
   BaseEntity,
   Column,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
@@ -17,7 +17,7 @@ export enum photoStatus {
 
 @Entity('photo')
 export class Photo extends BaseEntity {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
@@ -26,13 +26,11 @@ export class Photo extends BaseEntity {
   @Column()
   link: string;
 
-  @Column()
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({name: 'created_at', type: 'timestamp'})
+  createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({name: 'updated_at', type: 'timestamp', nullable: true})
+  updatedAt: Date;
 
   @Column({
     type: 'enum',

@@ -2,13 +2,11 @@ import bcrypt from 'bcryptjs';
 
 import {
   Entity,
-  BaseEntity,
   Column,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  BeforeInsert,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
 
@@ -20,17 +18,17 @@ export enum userStatus {
 
 @Entity('User')
 export class User {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
-      nullable: true
+    nullable: true,
   })
   name: string;
 
   @Column({
-      nullable: true,
-      unique: true
+    nullable: true,
+    unique: true,
   })
   userName: string;
 
@@ -42,25 +40,22 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({name: 'created_at', type: 'timestamp'}, )
+  createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({name: 'updated_at', type: 'timestamp', nullable: true })
+  updatedAt?: Date;
 
   @Column({
     type: 'enum',
     enum: userStatus,
-    default: 'active'
+    default: 'active',
   })
   status: userStatus;
 
   @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[];
+  photos?: Photo[];
 
-  @BeforeInsert()
   hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);
   }
