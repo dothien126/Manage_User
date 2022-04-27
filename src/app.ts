@@ -12,6 +12,10 @@ import { dbCreateConnection } from './orm/dbConnection';
 import './utils/response/customSuccess';
 import { errorHandler } from './middleware/errorHandler';
 
+// import route
+import userRoute from './user/user.route';
+import authRoute from './auth/auth.route';
+
 const app = express();
 
 // use middle ware
@@ -21,7 +25,6 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
 // home page
 app.get('/home', (req, res, next) => {
   res
@@ -29,6 +32,10 @@ app.get('/home', (req, res, next) => {
     .setHeader('Content-Type', 'text/html')
     .send(`<h4>💀👻 Welcome to my project 👻💀</h4>`);
 });
+
+// routes
+app.use(userRoute);
+app.use(authRoute);
 
 // catch route is not valid
 app.get('*', (req, res, next) => {

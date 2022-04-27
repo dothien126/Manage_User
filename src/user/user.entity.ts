@@ -53,6 +53,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: userStatus,
+    default: 'active'
   })
   status: userStatus;
 
