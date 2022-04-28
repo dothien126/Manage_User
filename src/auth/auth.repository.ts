@@ -38,7 +38,7 @@ export class UserLoginDto {
 }
 
 export class UserChangePasswordDto {
-  @IsEmail({}, { message: 'Provided Email is not valid' })
+  @IsString()
   @Trim()
   public password: string;
 

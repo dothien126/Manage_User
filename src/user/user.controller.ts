@@ -68,7 +68,7 @@ export const userUpdate = async (
     }
 
     await UserService.updateUser(id, req.body);
-    res.customSuccess(200, 'User successfully saved.', '');
+    res.customSuccess(200, 'User successfully saved.', user);
   } catch (err) {
     next(err);
   }
