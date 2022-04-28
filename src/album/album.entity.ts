@@ -14,8 +14,8 @@ import { Photo } from '../photo/photo.entity';
 import { User } from '../user/user.entity';
 
 export enum albumStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
+  PUBLIC = 'public',
+  PRIVATE = 'private',
 }
 
 @Entity('Album')
@@ -38,6 +38,7 @@ export class Album extends BaseEntity {
   @Column({
     type: 'enum',
     enum: albumStatus,
+    default: 'private'
   })
   status: albumStatus;
 

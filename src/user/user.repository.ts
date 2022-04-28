@@ -1,10 +1,7 @@
 import {
-  IsDate,
   IsEmail,
   IsString,
-  Length,
   MinLength,
-  validate,
 } from 'class-validator';
 import { Trim } from 'class-sanitizer';
 export class UserDto {

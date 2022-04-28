@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+
 import { User } from './user.entity';
 import { getRepository } from 'typeorm';
 
