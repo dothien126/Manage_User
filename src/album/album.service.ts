@@ -28,7 +28,7 @@ export const updateAlbum = async (id: string, album: Album): Promise<Album> => {
   return albumRepository.save(album);
 };
 
-// delete user by id
+// delete album by id
 export const deleteAlbumById = async (id: string): Promise<void> => {
   const albumRepository = getRepository(Album);
   await albumRepository.delete(id);
