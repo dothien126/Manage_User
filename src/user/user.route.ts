@@ -1,17 +1,18 @@
 import {Router} from 'express'
 
 import { userList, userId, userUpdate, userDelete } from './user.controller'
-import dtoValidationMiddleware from '../middleware/validate'
+import dtoValidation from '../middleware/validate'
 import { UserDto } from './user.repository'
+import {checkJwt} from '../middleware/decodeJwt'
 
 const router = Router()
 
-router.get('/users', userList)
+router.get('/users', checkJwt, userList)
 
-router.get('/users/:id', userId)
+router.get('/users/:id', checkJwt, userId)
 
-router.patch('/users/:id', dtoValidationMiddleware(UserDto), userUpdate),
+router.patch('/users/:id', checkJwt, dtoValidation(UserDto), userUpdate),
 
-router.delete('users/:id', userDelete)
+router.delete('users/:id', checkJwt, userDelete)
 
 export default router

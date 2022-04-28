@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
 import { User } from '../user/user.entity';
+import * as UserService from '../user/user.service';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from 'utils/response/customSuccess';
 import { JwtPayload, createJwtToken } from '../utils/createJwtToken';
@@ -13,10 +14,7 @@ export const register = async (
 ) => {
   try {
     const { userName, name, email, password } = req.body;
-
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne({ where: { email } });
-
+    const user = await UserService.findUserByEmail(email);
     if (user) {
       const customError = new CustomError(
         400,
@@ -32,16 +30,11 @@ export const register = async (
     newUser.email = email;
     newUser.password = password;
     newUser.hashPassword();
-    await userRepository.save(newUser);
+    await UserService.createNewUser(newUser);
 
     return res.customSuccess(201, 'User successfully created.', newUser);
   } catch (err) {
-    const customError = new CustomError(
-      400,
-      'General',
-      `User can't be created`
-    );
-    return next(customError);
+    next(err);
   }
 };
 
@@ -50,12 +43,9 @@ export const login = async (
   res: CustomResponse,
   next: NextFunction
 ) => {
-  const { userName, email, password } = req.body;
-
-  const userRepository = getRepository(User);
   try {
-    const user = await userRepository.findOne({ where: { email } });
-
+    const { email, password } = req.body;
+    const user = await UserService.findUserByEmail(email);
     if (!user) {
       const customError = new CustomError(
         404,
@@ -81,20 +71,10 @@ export const login = async (
       created_at: user.createdAt,
     };
 
-    try {
-      const token = createJwtToken(jwtPayload);
-      res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
-    } catch (err) {
-      const customError = new CustomError(
-        400,
-        'General',
-        "Token can't be created"
-      );
-      return next(customError);
-    }
+    const token = createJwtToken(jwtPayload);
+    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
   } catch (err) {
-    const customError = new CustomError(400, 'General', 'Error');
-    return next(customError);
+    next(err);
   }
 };
 
@@ -107,10 +87,8 @@ export const changePassword = async (
   const { id } = req.params;
 
   if (passwordNew === passwordConfirm) {
-    const userRepository = getRepository(User);
     try {
-      const user = await userRepository.findOne({ where: { id } });
-
+      const user = await UserService.findUserById(id)
       if (!user) {
         const customError = new CustomError(
           404,
@@ -131,7 +109,7 @@ export const changePassword = async (
 
       user.password = passwordNew;
       user.hashPassword();
-      userRepository.save(user);
+      await UserService.updateUser(id, user)
 
       res.customSuccess(200, 'Password successfully changed.', null);
     } catch (err) {

@@ -62,7 +62,7 @@ export class User {
     this.password = bcrypt.hashSync(this.password, 8);
   }
 
-  checkIfPasswordMatch(unryptedPassword: string) {
-    return bcrypt.compareSync(unryptedPassword, this.password);
+  checkIfPasswordMatch(hashPassword: string) {
+    return bcrypt.compareSync(hashPassword, this.password);
   }
 }

@@ -18,7 +18,7 @@ export enum albumStatus {
   INACTIVE = 'inactive',
 }
 
-@Entity('album')
+@Entity('Album')
 export class Album extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -4,7 +4,7 @@ import { validate, ValidationError } from 'class-validator';
 import { sanitize, Trim } from 'class-sanitizer';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 
-function dtoValidationMiddleware(
+function dtoValidation(
   type: any,
   skipMissingProperties = false
 ): RequestHandler {
@@ -30,4 +30,4 @@ function dtoValidationMiddleware(
   };
 }
 
-export default dtoValidationMiddleware;
+export default dtoValidation;

@@ -15,7 +15,7 @@ export enum photoStatus {
   INACTIVE = 'inactive',
 }
 
-@Entity('photo')
+@Entity('Photo')
 export class Photo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
