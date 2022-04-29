@@ -3,6 +3,28 @@ import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from '../utils/response/customSuccess';
 import { Request, NextFunction } from 'express';
 
+const addPhoto = async (req: Request, res: CustomResponse, next: NextFunction) => {
+  if (!req.file) {
+    const customError = new CustomError(
+      404,
+      'General',
+      `Upload file error`
+    );
+    return next(customError);
+  }
+  const name = req.file.filename;
+  const link = req.file.path;
+  const userId = req.user.id;
+  try {
+    const photo = await photoService.createNewPhoto({name, link, userId});
+    await userService.addPhotoToUser(userId, photo);
+
+    return res.customSuccess(200, 'Create photo successfully.', photo)
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).send(error);
+  }
+};
+
 export const photoList = async (
   req: Request,
   res: CustomResponse,

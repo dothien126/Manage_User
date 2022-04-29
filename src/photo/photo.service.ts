@@ -21,7 +21,7 @@ export const createNewPhoto = async (photo: Photo): Promise<Photo> => {
   return newPhoto;
 };
 
-// update photo
+// update photo with id
 export const updatePhoto = async (id: string, photo: Photo): Promise<Photo> => {
   const photoRepository = getRepository(Photo);
   photo.id = id;
@@ -35,4 +35,10 @@ export const deletePhotoById = async (id: string): Promise<void> => {
   return;
 };
 
-const upPathFile = async (id: string, link: string) => {};
+// update photo
+export const upPath = async (link: string, photo: Photo): Promise<Photo> => {
+  const photoRepository = getRepository(Photo);
+  photo.link = link;
+  return photoRepository.save(photo);
+};
+
