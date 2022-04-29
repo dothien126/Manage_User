@@ -6,6 +6,8 @@ import * as UserService from '../user/user.service';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from 'utils/response/customSuccess';
 import { JwtPayload, createJwtToken } from '../utils/createJwtToken';
+import { transporter } from '../../config/email';
+import { checkJwt } from '../middleware/decodeJwt';
 
 export const register = async (
   req: Request,
@@ -31,6 +33,28 @@ export const register = async (
     newUser.password = password;
     newUser.hashPassword();
     await UserService.createNewUser(newUser);
+
+    const options = {
+      from: `${process.env.USER_MAIL}`,
+      to: `developeer126@gmail.com, ${email}`,
+      subject: 'Validate Email Account',
+      html: `<b>http://localhost:${process.env.PORT}/verify/${user.id}</b>`,
+    };
+
+    try {
+      await transporter.sendMail(options);
+    } catch (err) {
+      next(err);
+    }
+
+    const jwtPayload: JwtPayload = {
+      id: Number(user.id),
+      name: user.name,
+      email: user.email,
+      created_at: user.createdAt,
+    };
+    const token = createJwtToken(jwtPayload);
+    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
 
     return res.customSuccess(201, 'User successfully created.', newUser);
   } catch (err) {
@@ -63,16 +87,42 @@ export const login = async (
       );
       return next(customError);
     }
+  } catch (err) {
+    next(err);
+  }
+};
 
-    const jwtPayload: JwtPayload = {
-      id: Number(user.id),
-      name: user.name,
-      email: user.email,
-      created_at: user.createdAt,
-    };
+export const verifyEmail = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  const { id, token } = req.body;
 
-    const token = createJwtToken(jwtPayload);
-    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
+  try {
+    const user = await UserService.findUserById(id);
+    if (!user) {
+      const customError = new CustomError(404, 'General', 'User not found');
+      return next(customError);
+    }
+
+    if (token) {
+      try {
+        const isEmailVerified = await UserService.findUserByEmail(token.email);
+        if (isEmailVerified) {
+          return res.customSuccess(200, 'Email is been active', '');
+        } else {
+          const customError = new CustomError(
+            404,
+            'General',
+            'Email is not active'
+          );
+          return next(customError);
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
   } catch (err) {
     next(err);
   }
@@ -88,7 +138,7 @@ export const changePassword = async (
 
   if (passwordNew === passwordConfirm) {
     try {
-      const user = await UserService.findUserById(id)
+      const user = await UserService.findUserById(id);
       if (!user) {
         const customError = new CustomError(
           404,
@@ -109,7 +159,7 @@ export const changePassword = async (
 
       user.password = passwordNew;
       user.hashPassword();
-      await UserService.updateUser(id, user)
+      await UserService.updateUser(id, user);
 
       res.customSuccess(200, 'Password successfully changed.', null);
     } catch (err) {
@@ -123,5 +173,40 @@ export const changePassword = async (
       'Please enter password again!'
     );
     return next(customError);
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const newUser: User = await UserService.findUserById(id);
+    if (!newUser) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `User ${name} not found.`
+      );
+      return next(customError);
+    }
+    const { newPassword, confirmPassword } = req.body;
+    if (newPassword === confirmPassword) {
+      newUser.password = newPassword;
+      newUser.hashPassword();
+      await UserService.updateUser(id, newUser);
+      return res.customSuccess(200, 'Updated password successfully.', null);
+    } else {
+      const customError = new CustomError(
+        400,
+        'General',
+        `Please enter password again`
+      );
+      return next(customError);
+    }
+  } catch (error) {
+    next(error);
   }
 };
