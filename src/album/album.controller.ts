@@ -17,7 +17,7 @@ export const createAlbum = async (
       const customError = new CustomError(
         404,
         'General',
-        `Album has already`
+        `Album ${album.name} has already`
       );
       return next(customError);
     }
@@ -25,7 +25,7 @@ export const createAlbum = async (
     newAlbum.name = name;
     newAlbum.description = description;
     await albumService.createNewAlbum(newAlbum);
-    return res.customSuccess(201, 'User successfully created.', newAlbum);
+    return res.customSuccess(201, 'Album successfully created.', newAlbum);
   } catch (err) {
     next(err);
   }
@@ -46,7 +46,7 @@ export const albumList = async (
       );
       return next(customError);
     }
-    res.customSuccess(200, 'List of album.', albumList);
+    res.customSuccess(200, 'List of albums.', albumList);
   } catch (err) {
     next(err);
   }

@@ -1,6 +1,6 @@
-
 import { User } from './user.entity';
 import { getRepository } from 'typeorm';
+import { Photo } from '../photo/photo.entity';
 
 // get all users
 export const getAllUser = async ({}): Promise<User[]> => {
@@ -44,4 +44,24 @@ export const deleteUserById = async (id: string): Promise<void> => {
   return;
 };
 
-const upPathFile = async (id: string, link: string) => {};
+// add photo to user
+export const addPhotoToUser = async (id: string, photo: Photo): Promise<User> => {
+  const userRepository = getRepository(User);
+  const newUser = new User()
+  newUser.push(photo.id)
+  return userRepository.save()
+}
+  
+User.findByIdAndUpdate(
+    userId,
+    { $push: { photos: photo.id } },
+    { new: true, useFindAndModify: false }
+  );
+
+// add album to user
+const addAlbumToUser = (userId, album) =>
+  User.findByIdAndUpdate(
+    userId,
+    { $push: { albums: album.id } },
+    { new: true, useFindAndModify: false }
+  );

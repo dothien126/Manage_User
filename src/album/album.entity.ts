@@ -8,7 +8,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
 import { User } from '../user/user.entity';
@@ -29,21 +29,21 @@ export class Album extends BaseEntity {
   @Column()
   description: string;
 
-  @CreateDateColumn({name: 'created_at', type: 'timestamp'})
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn({name: 'updated_at', type: 'timestamp', nullable: true})
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', nullable: true })
   updatedAt?: Date;
 
   @Column({
     type: 'enum',
     enum: albumStatus,
-    default: 'private'
+    default: 'private',
   })
   status: albumStatus;
 
   @OneToMany(() => Photo, (photo) => photo.user, {
-    cascade: true
+    cascade: true,
   })
   photos: Photo[];
 

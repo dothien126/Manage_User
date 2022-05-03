@@ -26,5 +26,5 @@ export class AlbumDto {
       .join('|')}$`,
     'i'
   )
-  role: albumStatus;
+  status: albumStatus;
 }
