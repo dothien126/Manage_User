@@ -50,3 +50,14 @@ export class UserChangePasswordDto {
   @MinLength(8, { message: 'Password should be minimum of 8 characters' })
   public passwordConfirm: string;
 }
+
+export class UserResetPasswordDto {
+
+  @IsString()
+  @MinLength(8, { message: 'Password should be minimum of 8 characters' })
+  public newPassword: string;
+
+  @IsString()
+  @MinLength(8, { message: 'Password should be minimum of 8 characters' })
+  public confirmPassword: string;
+}

@@ -2,26 +2,23 @@ import * as photoService from './photo.service';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from '../utils/response/customSuccess';
 import { Request, NextFunction } from 'express';
+import { Photo } from './photo.entity';
+import path from 'path'
 
 const addPhoto = async (req: Request, res: CustomResponse, next: NextFunction) => {
-  if (!req.file) {
-    const customError = new CustomError(
-      404,
-      'General',
-      `Upload file error`
-    );
-    return next(customError);
-  }
-  const name = req.file.filename;
-  const link = req.file.path;
-  const userId = req.user.id;
   try {
-    const photo = await photoService.createNewPhoto({name, link, userId});
-    await userService.addPhotoToUser(userId, photo);
+    const { id: userId } = req.params;
+    const link = path.join(
+      '../../../public/upload.image',
+      req.file.originalname
+    );
+    const newPhoto = new Photo()
+    newPhoto.link = link
 
-    return res.customSuccess(200, 'Create photo successfully.', photo)
+    const rs = await photoService.upPath(link, newPhoto);
+    res.customSuccess(200, 'Upload photo succesfully.', rs);
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).send(error);
+    next(error);
   }
 };
 
@@ -63,7 +60,7 @@ export const photoId = async (
       );
       return next(customError);
     }
-    res.customSuccess(200, 'Phôt information', photo);
+    res.customSuccess(200, 'Photo information', photo);
   } catch (err) {
     next(err);
   }

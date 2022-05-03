@@ -15,6 +15,8 @@ import { errorHandler } from './middleware/errorHandler';
 // import route
 import userRoute from './user/user.route';
 import authRoute from './auth/auth.route';
+import photoRoute from './photo/photo.route';
+import albumRoute from './album/album.route'
 
 const app = express();
 
@@ -36,6 +38,8 @@ app.get('/home', (req, res, next) => {
 // routes
 app.use(userRoute);
 app.use(authRoute);
+app.use(photoRoute);
+app.use(albumRoute);
 
 // catch route is not valid
 app.get('*', (req, res, next) => {

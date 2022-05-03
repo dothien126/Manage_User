@@ -13,6 +13,6 @@ router.get('/users/:id', checkJwt, userId)
 
 router.patch('/users/:id', checkJwt, dtoValidation(UserDto), userUpdate),
 
-router.delete('users/:id', checkJwt, userDelete)
+router.delete('/users/:id', checkJwt, userDelete)
 
 export default router

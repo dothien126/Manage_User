@@ -36,7 +36,7 @@ export const deletePhotoById = async (id: string): Promise<void> => {
 };
 
 // update photo
-export const upPath = async (link: string, photo: Photo): Promise<Photo> => {
+export const upPath = async ( link: string, photo: Photo): Promise<Photo> => {
   const photoRepository = getRepository(Photo);
   photo.link = link;
   return photoRepository.save(photo);

@@ -2,6 +2,34 @@ import * as albumService from './album.service';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from '../utils/response/customSuccess';
 import { Request, NextFunction } from 'express';
+import { Album } from './album.entity';
+
+export const createAlbum = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  try {
+    const {name, description} = req.body;
+    const album = await albumService.findAlbumById(name);
+
+    if (album) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `Album has already`
+      );
+      return next(customError);
+    }
+    const newAlbum = new Album();
+    newAlbum.name = name;
+    newAlbum.description = description;
+    await albumService.createNewAlbum(newAlbum);
+    return res.customSuccess(201, 'User successfully created.', newAlbum);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const albumList = async (
   req: Request,
@@ -71,7 +99,7 @@ export const albumUpdate = async (
   }
 };
 
-export const albumDelete = async (req: Request, next: NextFunction) => {
+export const albumDelete = async (req: Request, res: CustomResponse, next: NextFunction) => {
   try {
     const id = req.params.id;
     const album = await albumService.findAlbumById(id);
@@ -85,6 +113,7 @@ export const albumDelete = async (req: Request, next: NextFunction) => {
     }
 
     await albumService.deleteAlbumById(id);
+    res.customSuccess(200, 'Album delete successfully.', "");
   } catch (err) {
     next(err);
   }

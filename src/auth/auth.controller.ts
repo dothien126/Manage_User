@@ -34,27 +34,18 @@ export const register = async (
     newUser.hashPassword();
     await UserService.createNewUser(newUser);
 
-    const options = {
-      from: `${process.env.USER_MAIL}`,
-      to: `developeer126@gmail.com, ${email}`,
-      subject: 'Validate Email Account',
-      html: `<b>http://localhost:${process.env.PORT}/verify/${user.id}</b>`,
-    };
+    // const options = {
+    //   from: `${process.env.USER_MAIL}`,
+    //   to: `developeer126@gmail.com, ${email}`,
+    //   subject: 'Validate Email Account',
+    //   html: `<b>http://localhost:${process.env.PORT}</b>`,
+    // };
 
-    try {
-      await transporter.sendMail(options);
-    } catch (err) {
-      next(err);
-    }
-
-    const jwtPayload: JwtPayload = {
-      id: Number(user.id),
-      name: user.name,
-      email: user.email,
-      created_at: user.createdAt,
-    };
-    const token = createJwtToken(jwtPayload);
-    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
+    // try {
+    //   await transporter.sendMail(options);
+    // } catch (err) {
+    //   next(err);
+    // }
 
     return res.customSuccess(201, 'User successfully created.', newUser);
   } catch (err) {
@@ -87,6 +78,28 @@ export const login = async (
       );
       return next(customError);
     }
+
+    // const options = {
+    //   from: `${process.env.USER_MAIL}`,
+    //   to: `developeer126@gmail.com, ${email}`,
+    //   subject: 'Validate Email Account',
+    //   html: `<b>http://localhost:${process.env.PORT}</b>`,
+    // };
+
+    // try {
+    //   await transporter.sendMail(options);
+    // } catch (err) {
+    //   next(err);
+    // }
+
+    const jwtPayload: JwtPayload = {
+      id: Number(user.id),
+      name: user.name,
+      email: user.email,
+      created_at: user.createdAt,
+    };
+    const token = createJwtToken(jwtPayload);
+    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
   } catch (err) {
     next(err);
   }
