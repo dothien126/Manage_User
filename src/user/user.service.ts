@@ -1,6 +1,7 @@
 import { User } from './user.entity';
 import { getRepository } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
+import {Album} from '../album/album.entity'
 
 // get all users
 export const getAllUser = async ({}): Promise<User[]> => {
@@ -54,4 +55,11 @@ export const deleteUserById = async (id: string): Promise<void> => {
 // }
 
 // add album to user
+// add album to user
+export const getAllPhotoOfAlbum = async (id: string): Promise<User[]> => {
+  const userRepository = getRepository(User);
+  return await userRepository.find({
+    relations: ['Album']
+  })
+};
 

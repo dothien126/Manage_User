@@ -1,4 +1,3 @@
-import { timeLog } from 'console';
 import {
   Entity,
   Column,
@@ -8,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   PrimaryGeneratedColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
 import { User } from '../user/user.entity';
@@ -22,7 +22,7 @@ export class Album {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'name' })
   name: string;
 
   @Column()
@@ -46,7 +46,19 @@ export class Album {
   })
   photos: Photo[];
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  user: User[];
+  @ManyToMany((type) => User, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'User_Album',
+    joinColumn: {
+      name: 'album',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user',
+      referencedColumnName: 'id',
+    },
+  })
+  users: User[];
 }

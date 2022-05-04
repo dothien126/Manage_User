@@ -1,14 +1,18 @@
+import { Album } from '../album/album.entity';
+import { Photo } from '../photo/photo.entity';
 import bcrypt from 'bcryptjs';
 
 import {
   Entity,
+  BaseEntity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
   PrimaryGeneratedColumn,
+  ManyToMany,
 } from 'typeorm';
-import { Photo } from '../photo/photo.entity';
+
 
 export enum userStatus {
   ACTIVE = 'active',
@@ -17,7 +21,7 @@ export enum userStatus {
 }
 
 @Entity('User')
-export class User {
+export class User extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -53,10 +57,15 @@ export class User {
   })
   status: userStatus;
 
-  @OneToMany(() => Photo, (photo) => photo.user, {
+  @OneToMany((type) => Photo, (photo) => photo.user, {
     cascade: true
   })
   photos?: Photo[];
+
+  @ManyToMany((type) => Album, {
+    cascade: true
+  })
+  albums: Album[]
 
   hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);

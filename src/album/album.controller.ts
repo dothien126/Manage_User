@@ -10,8 +10,8 @@ export const createAlbum = async (
   next: NextFunction
 ) => {
   try {
-    const {name, description} = req.body;   
-    const album = await albumService.findAlbumById(name);
+    const { name, description } = req.body;
+    const album = await albumService.findAlbumByName(name);
 
     if (album) {
       const customError = new CustomError(
@@ -21,13 +21,11 @@ export const createAlbum = async (
       );
       return next(customError);
     }
+
     const newAlbum = new Album();
     newAlbum.name = name;
-    newAlbum.description = description;
-
-    await albumService.createNewAlbum(newAlbum);
-    console.log(newAlbum);
-    
+    newAlbum.description = description
+    await albumService.createNewAlbum(newAlbum)
     return res.customSuccess(201, 'Album successfully created.', newAlbum);
   } catch (err) {
     next(err);
@@ -102,7 +100,11 @@ export const albumUpdate = async (
   }
 };
 
-export const albumDelete = async (req: Request, res: CustomResponse, next: NextFunction) => {
+export const albumDelete = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
   try {
     const id = req.params.id;
     const album = await albumService.findAlbumById(id);
@@ -116,8 +118,10 @@ export const albumDelete = async (req: Request, res: CustomResponse, next: NextF
     }
 
     await albumService.deleteAlbumById(id);
-    res.customSuccess(200, 'Album delete successfully.', "");
+    res.customSuccess(200, 'Album delete successfully.', '');
   } catch (err) {
     next(err);
   }
 };
+
+
