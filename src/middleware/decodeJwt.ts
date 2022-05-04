@@ -6,7 +6,7 @@ import { CustomError } from '../utils/response/custom-error/CustomError';
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   type JwtPayload = {
-    id: number;
+    id: string;
     name: string;
     email: string;
     created_at: Date;

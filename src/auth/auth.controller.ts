@@ -34,19 +34,25 @@ export const register = async (
     newUser.hashPassword();
     await UserService.createNewUser(newUser);
 
+    // const jwtPayload: JwtPayload = {
+    //   id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    //   created_at: user.createdAt,
+    // };
+    // const token = createJwtToken(jwtPayload);
     // const options = {
     //   from: `${process.env.USER_MAIL}`,
-    //   to: `developeer126@gmail.com, ${email}`,
-    //   subject: 'Validate Email Account',
-    //   html: `<b>http://localhost:${process.env.PORT}</b>`,
+    //   to: `dothien2601ak39@gmail.com, ${email}`,
+    //   subject: 'Confirm Email Account',
+    //   html: `Please enter this link: <b>http://localhost:${process.env.PORT}/verify-email/${user.id}/${token}</b>`,
     // };
 
     // try {
     //   await transporter.sendMail(options);
     // } catch (err) {
-    //   next(err);
+    //   throw err;
     // }
-
     return res.customSuccess(201, 'User successfully created.', newUser);
   } catch (err) {
     next(err);
@@ -79,26 +85,26 @@ export const login = async (
       return next(customError);
     }
 
-    // const options = {
-    //   from: `${process.env.USER_MAIL}`,
-    //   to: `developeer126@gmail.com, ${email}`,
-    //   subject: 'Validate Email Account',
-    //   html: `<b>http://localhost:${process.env.PORT}</b>`,
-    // };
-
-    // try {
-    //   await transporter.sendMail(options);
-    // } catch (err) {
-    //   next(err);
-    // }
-
     const jwtPayload: JwtPayload = {
-      id: Number(user.id),
+      id: user.id,
       name: user.name,
       email: user.email,
       created_at: user.createdAt,
     };
     const token = createJwtToken(jwtPayload);
+    const options = {
+      from: `${process.env.USER_MAIL}`,
+      to: `dothien2601ak39@gmail.com, ${email}`,
+      subject: 'Confirm Email Account',
+      html: `Please enter this link: <b>http://localhost:${process.env.PORT}/verify-email/${user.id}/${token}</b>`,
+    };
+
+    try {
+      await transporter.sendMail(options);
+    } catch (err) {
+      throw err;
+    }
+
     res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
   } catch (err) {
     next(err);

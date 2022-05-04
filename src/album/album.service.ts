@@ -17,7 +17,7 @@ export const findAlbumById = async (id: string): Promise<Album | undefined> => {
 // create a new album
 export const createNewAlbum = async (album: Album): Promise<Album> => {
   const albumRepository = getRepository(Album);
-  const newAlbum = await albumRepository.save(album);
+  const newAlbum = await albumRepository.save(album); 
   return newAlbum;
 };
 
@@ -35,4 +35,3 @@ export const deleteAlbumById = async (id: string): Promise<void> => {
   return;
 };
 
-const upPathFile = async (id: string, link: string) => {};

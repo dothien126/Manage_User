@@ -45,23 +45,13 @@ export const deleteUserById = async (id: string): Promise<void> => {
 };
 
 // add photo to user
-export const addPhotoToUser = async (id: string, photo: Photo): Promise<User> => {
-  const userRepository = getRepository(User);
-  const newUser = new User()
-  newUser.push(photo.id)
-  return userRepository.save()
-}
-  
-User.findByIdAndUpdate(
-    userId,
-    { $push: { photos: photo.id } },
-    { new: true, useFindAndModify: false }
-  );
+// export const addPhotoToUser = async (photoId: string, user: User): Promise<User> => {
+//   const userRepository = getRepository(User);
+//   const newUser: User[] = [];
+//   user.photoId = photoId
+//   newUser.push(photoId)
+//   return userRepository.save(user)
+// }
 
 // add album to user
-const addAlbumToUser = (userId, album) =>
-  User.findByIdAndUpdate(
-    userId,
-    { $push: { albums: album.id } },
-    { new: true, useFindAndModify: false }
-  );
+

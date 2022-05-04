@@ -1,6 +1,5 @@
 import {
   Entity,
-  BaseEntity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
@@ -16,7 +15,7 @@ export enum photoStatus {
 }
 
 @Entity('Photo')
-export class Photo extends BaseEntity {
+export class Photo {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

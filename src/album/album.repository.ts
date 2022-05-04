@@ -19,12 +19,12 @@ export class AlbumDto {
   })
   public description?: string;
 
-  @IsOptional()
-  @Matches(
-    `^${Object.values(albumStatus)
-      .filter((v) => typeof v !== 'number')
-      .join('|')}$`,
-    'i'
-  )
-  status: albumStatus;
+  // @IsOptional()
+  // @Matches(
+  //   `^${Object.values(albumStatus)
+  //     .filter((v) => typeof v !== 'number')
+  //     .join('|')}$`,
+  //   'i'
+  // )
+  // status: albumStatus;
 }

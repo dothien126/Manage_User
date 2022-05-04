@@ -1,7 +1,6 @@
 import { timeLog } from 'console';
 import {
   Entity,
-  BaseEntity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -19,7 +18,7 @@ export enum albumStatus {
 }
 
 @Entity('Album')
-export class Album extends BaseEntity {
+export class Album {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

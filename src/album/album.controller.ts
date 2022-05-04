@@ -10,12 +10,12 @@ export const createAlbum = async (
   next: NextFunction
 ) => {
   try {
-    const {name, description} = req.body;
+    const {name, description} = req.body;   
     const album = await albumService.findAlbumById(name);
 
     if (album) {
       const customError = new CustomError(
-        404,
+        400,
         'General',
         `Album ${album.name} has already`
       );
@@ -24,7 +24,10 @@ export const createAlbum = async (
     const newAlbum = new Album();
     newAlbum.name = name;
     newAlbum.description = description;
+
     await albumService.createNewAlbum(newAlbum);
+    console.log(newAlbum);
+    
     return res.customSuccess(201, 'Album successfully created.', newAlbum);
   } catch (err) {
     next(err);
