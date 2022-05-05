@@ -92,7 +92,7 @@ export const userDelete = async (
     }
 
     await UserService.deleteUserById(id);
-    res.customSuccess(200, 'User deleted.', "@");
+    return res.customSuccess(200, 'User deleted.', "@");
   } catch (err) {
     next(err);
   }

@@ -6,6 +6,7 @@ import {
   changePassword,
   verifyEmail,
   resetPassword,
+  loginUserName,
 } from './auth.controller';
 import dtoValidation from '../middleware/validate';
 import {
@@ -13,6 +14,7 @@ import {
   UserLoginDto,
   UserChangePasswordDto,
   UserResetPasswordDto,
+  UserLoginUserNameDto
 } from './auth.repository';
 import {checkJwt} from '../middleware/decodeJwt'
 
@@ -37,6 +39,26 @@ const router = Router();
  *          description: Login fail ... Please again !
  */
 router.post('/login', dtoValidation(UserLoginDto), login);
+
+/**
+ * @swagger
+ * /users/login_username:
+ *   post:
+ *     summary: Login a new user.
+ *     tags:
+ *       - Authentication
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         description: Login a new user with email and password
+ *     responses:
+ *       201:
+ *         description: Login successfully
+ *       400:
+ *          description: Login fail ... Please again !
+ */
+router.post('/login_username', dtoValidation(UserLoginUserNameDto), loginUserName);
 
 /**
  * @swagger

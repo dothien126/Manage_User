@@ -5,17 +5,18 @@ import { Request, NextFunction } from 'express';
 import { Photo } from './photo.entity';
 import path from 'path'
 
-const addPhoto = async (req: Request, res: CustomResponse, next: NextFunction) => {
+export const addPhoto = async (req: Request, res: CustomResponse, next: NextFunction) => {
   try {
-    const { id: userId } = req.params;
     const link = path.join(
-      '../../../public/upload.image',
+      '../../../../public/upload.image',
       req.file.originalname
     );
     const newPhoto = new Photo()
+    
     newPhoto.link = link
 
     const rs = await photoService.upPath(link, newPhoto);
+    await rs.save()
     res.customSuccess(200, 'Upload photo succesfully.', rs);
   } catch (error) {
     next(error);
@@ -90,7 +91,7 @@ export const photoUpdate = async (
   }
 };
 
-export const photoDelete = async (req: Request, next: NextFunction) => {
+export const photoDelete = async (req: Request, res: CustomResponse, next: NextFunction): Promise<void> => {
   try {
     const id = req.params.id;
     const photo = await photoService.findPhotoById(id);
@@ -104,6 +105,7 @@ export const photoDelete = async (req: Request, next: NextFunction) => {
     }
 
     await photoService.deletePhotoById(id);
+    return res.customSuccess(200, 'Photo delete successfully.', '@');
   } catch (err) {
     next(err);
   }

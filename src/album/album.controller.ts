@@ -3,6 +3,7 @@ import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from '../utils/response/customSuccess';
 import { Request, NextFunction } from 'express';
 import { Album } from './album.entity';
+import * as UserService from '../user/user.service'
 
 export const createAlbum = async (
   req: Request,
@@ -24,8 +25,8 @@ export const createAlbum = async (
 
     const newAlbum = new Album();
     newAlbum.name = name;
-    newAlbum.description = description
-    await albumService.createNewAlbum(newAlbum)
+    newAlbum.description = description;
+    await albumService.createNewAlbum(newAlbum);
     return res.customSuccess(201, 'Album successfully created.', newAlbum);
   } catch (err) {
     next(err);
@@ -118,10 +119,34 @@ export const albumDelete = async (
     }
 
     await albumService.deleteAlbumById(id);
-    res.customSuccess(200, 'Album delete successfully.', '');
+    return res.customSuccess(200, 'Album delete successfully.', '');
   } catch (err) {
     next(err);
   }
 };
 
-
+export const getAlbumUser = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  try {
+    const {userId, albumId} = req.params;
+    const user = await UserService.findUserById(userId)
+    const album = await albumService.findAlbumById(albumId)
+    if(user && album) {
+      user.albums = [album]
+      await user.save()
+      res.customSuccess(200, 'All album of user.', user.albums);
+    } else {
+      const customError = new CustomError(
+        404,
+        'General',
+        `User or album not found`
+      );
+      return next(customError);
+    }
+  } catch (error) {
+    next(error)
+  }
+};

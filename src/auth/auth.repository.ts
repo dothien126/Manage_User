@@ -37,6 +37,17 @@ export class UserLoginDto {
   public password: string;
 }
 
+export class UserLoginUserNameDto {
+  @IsString()
+  @Trim()
+  @MinLength(5, { message: 'UserName should be minimum of 5 characters' })
+  public userName?: string;
+
+  @IsString()
+  @MinLength(8, { message: 'Password should be minimum of 8 characters' })
+  public password: string;
+}
+
 export class UserChangePasswordDto {
   @IsString()
   @Trim()

@@ -18,7 +18,7 @@ export enum albumStatus {
 }
 
 @Entity('Album')
-export class Album {
+export class Album extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -111,6 +111,46 @@ export const login = async (
   }
 };
 
+export const loginUserName = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  try {
+    const { userName, password } = req.body;
+    const user = await UserService.findUserByUserName(userName);
+    if (!user) {
+      const customError = new CustomError(
+        404,
+        'General',
+        'Incorrect email or password'
+      );
+      return next(customError);
+    }
+
+    if (!user.checkIfPasswordMatch(password)) {
+      const customError = new CustomError(
+        404,
+        'General',
+        'Incorrect email or password'
+      );
+      return next(customError);
+    }
+
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      created_at: user.createdAt,
+    };
+    const token = createJwtToken(jwtPayload);
+
+    res.customSuccess(201, 'Token successfully created.', `Bearer ${token}`);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const verifyEmail = async (
   req: Request,
   res: CustomResponse,

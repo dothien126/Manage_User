@@ -1,7 +1,7 @@
 import { User } from './user.entity';
 import { getRepository } from 'typeorm';
 import { Photo } from '../photo/photo.entity';
-import {Album} from '../album/album.entity'
+import { Album } from '../album/album.entity';
 
 // get all users
 export const getAllUser = async ({}): Promise<User[]> => {
@@ -16,13 +16,22 @@ export const findUserById = async (id: string): Promise<User | undefined> => {
   return userRepository.findOne({ where: { id } });
 };
 
-// find User by Username
+// find User by email
 export const findUserByEmail = async (
   email: string
 ): Promise<User | undefined> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ where: { email } });
 };
+
+// find User by username
+export const findUserByUserName = async (
+  userName: string
+): Promise<User | undefined> => {
+  const userRepository = getRepository(User);
+  return userRepository.findOne({ where: { userName } });
+};
+
 
 // create a new user
 export const createNewUser = async (user: User): Promise<User> => {
@@ -45,6 +54,7 @@ export const deleteUserById = async (id: string): Promise<void> => {
   return;
 };
 
+
 // add photo to user
 // export const addPhotoToUser = async (photoId: string, user: User): Promise<User> => {
 //   const userRepository = getRepository(User);
@@ -59,7 +69,6 @@ export const deleteUserById = async (id: string): Promise<void> => {
 export const getAllPhotoOfAlbum = async (id: string): Promise<User[]> => {
   const userRepository = getRepository(User);
   return await userRepository.find({
-    relations: ['Album']
-  })
+    relations: ['Album'],
+  });
 };
-
