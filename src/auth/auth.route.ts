@@ -30,6 +30,7 @@ const router = Router();
  *     parameters:
  *       - in: body
  *         name: body
+ *            schema
  *         required: true
  *         description: Login a new user with email and password
  *     responses:

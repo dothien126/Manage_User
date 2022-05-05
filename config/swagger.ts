@@ -1,5 +1,4 @@
 
-
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -16,4 +15,4 @@ const swaggerOptions = {
   apis: ['src/**/**.route.ts'],
 };
 
-module.exports = swaggerOptions;
+export default swaggerOptions;

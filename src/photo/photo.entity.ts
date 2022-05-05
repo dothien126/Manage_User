@@ -35,6 +35,7 @@ export class Photo extends BaseEntity{
   @Column({
     type: 'enum',
     enum: photoStatus,
+    default: 'active'
   })
   status: photoStatus;
 

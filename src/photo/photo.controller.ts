@@ -8,7 +8,7 @@ import path from 'path'
 export const addPhoto = async (req: Request, res: CustomResponse, next: NextFunction) => {
   try {
     const link = path.join(
-      '../../../../public/upload.image',
+      '..public/upload.image',
       req.file.originalname
     );
     const newPhoto = new Photo()
@@ -17,7 +17,7 @@ export const addPhoto = async (req: Request, res: CustomResponse, next: NextFunc
 
     const rs = await photoService.upPath(link, newPhoto);
     await rs.save()
-    res.customSuccess(200, 'Upload photo succesfully.', rs);
+    res.customSuccess(201, 'Upload photo succesfully.', rs);
   } catch (error) {
     next(error);
   }

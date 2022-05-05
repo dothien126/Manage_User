@@ -7,6 +7,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import express from 'express';
 import helmet from 'helmet';
+import swaggerUI from 'swagger-ui-express'
+import swaggerJsDoc from 'swagger-jsdoc'
+import swaggerOptions from '../config/swagger'
 
 import { dbCreateConnection } from './orm/dbConnection';
 import './utils/response/customSuccess';
@@ -19,7 +22,7 @@ import photoRoute from './photo/photo.route';
 import albumRoute from './album/album.route'
 
 const app = express();
-
+const swaggerDocs = swaggerJsDoc(swaggerOptions)
 // use middle ware
 app.use(cors());
 app.use(morgan('dev'));
@@ -32,7 +35,7 @@ app.get('/home', (req, res, next) => {
   res
     .status(200)
     .setHeader('Content-Type', 'text/html')
-    .send(`<h4>💀👻 Welcome to my project 👻💀</h4>`);
+    .send(`💀👻 Welcome to my project 👻💀`);
 });
 
 // routes
@@ -40,6 +43,7 @@ app.use(userRoute);
 app.use(authRoute);
 app.use(photoRoute);
 app.use(albumRoute);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 // catch route is not valid
 app.get('*', (req, res, next) => {
