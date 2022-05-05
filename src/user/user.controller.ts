@@ -1,10 +1,10 @@
 import { Request, NextFunction } from 'express';
-import { getRepository } from 'typeorm';
 
 import { User } from './user.entity';
 import { CustomError } from '../utils/response/custom-error/CustomError';
 import { CustomResponse } from 'utils/response/customSuccess';
 import * as UserService from './user.service';
+import * as albumService from '../album/album.service'
 
 export const userList = async (
   req: Request,
@@ -97,3 +97,30 @@ export const userDelete = async (
     next(err);
   }
 };
+
+export const getAllAlbumOfAnUser = async (req:Request, res:CustomResponse, next:NextFunction) => {
+  try {
+    const {id} = req.params;
+    const user = await UserService.findUserById(id)
+    if (!user) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `User with id:${id} doesn't exists.`
+      );
+      return next(customError);
+    }
+    const rs = await UserService.getAllALbumOfUser(id); // return be like [{a}, {b}, {c}]
+    if(!rs) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `User don't have any album.`
+      );
+      return next(customError);
+    }
+    return res.customSuccess(200, 'User deleted.', rs);
+  } catch (error) {
+    next(error)
+  }
+}

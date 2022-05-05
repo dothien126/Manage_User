@@ -11,6 +11,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   ManyToMany,
+  JoinTable
 } from 'typeorm';
 
 
@@ -64,6 +65,17 @@ export class User extends BaseEntity{
 
   @ManyToMany((type) => Album, {
     cascade: true
+  })
+  @JoinTable({
+    name: 'User_Album',
+    joinColumn: {
+			name: 'user',
+			referencedColumnName: 'id',
+		},
+		inverseJoinColumn: {
+			name: 'album',
+			referencedColumnName: 'id',
+		},
   })
   albums: Album[]
 

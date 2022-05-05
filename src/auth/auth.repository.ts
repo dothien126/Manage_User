@@ -72,3 +72,9 @@ export class UserResetPasswordDto {
   @MinLength(8, { message: 'Password should be minimum of 8 characters' })
   public confirmPassword: string;
 }
+
+export class UserForgotPasswordDto {
+  @IsEmail({}, { message: 'Provided Email is not valid' })
+  @Trim()
+  public email: string;
+}
