@@ -256,6 +256,7 @@ export const resetPassword = async (
       newUser.password = newPassword;
       newUser.hashPassword();
       await UserService.updateUser(id, newUser);
+
       return res.customSuccess(200, 'Updated password successfully.', null);
     } else {
       const customError = new CustomError(
@@ -267,5 +268,41 @@ export const resetPassword = async (
     }
   } catch (error) {
     next(error);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) => {
+  try {
+    const { email } = req.body;
+    const user = await UserService.findUserByEmail(email);
+    if (!user) {
+      const customError = new CustomError(404, 'General', 'Email not found');
+      return next(customError);
+    }
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      created_at: user.createdAt,
+    };
+    const token = createJwtToken(jwtPayload);
+    const options = {
+      from: `${process.env.USER_MAIL}`,
+      to: `dothien2601ak39@gmail.com, ${email}`,
+      subject: 'Confirm Email Account',
+      html: `Please enter this link: <b>http://localhost:${process.env.PORT}/verify-email/${user.id}/${token}</b>`,
+    };
+
+    try {
+      await transporter.sendMail(options);
+    } catch (err) {
+      throw err;
+    }
+  } catch (err) {
+    next(err);
   }
 };

@@ -2,7 +2,7 @@
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: 'RESTful API',
+      title: 'Manage User',
       version: '2.0.0',
     },
     servers: [
