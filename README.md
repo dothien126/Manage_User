@@ -1,2 +1,2 @@
 # Manage_User
-Build RESTful API for manage User, Album anh Photo
+Build RESTful API for manage User, Album and Photo
