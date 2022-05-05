@@ -7,6 +7,7 @@ import {
   verifyEmail,
   resetPassword,
   loginUserName,
+  forgotPassword,
 } from './auth.controller';
 import dtoValidation from '../middleware/validate';
 import {
@@ -15,6 +16,7 @@ import {
   UserChangePasswordDto,
   UserResetPasswordDto,
   UserLoginUserNameDto,
+  UserForgotPasswordDto,
 } from './auth.repository';
 import { checkJwt } from '../middleware/decodeJwt';
 
@@ -179,6 +181,32 @@ router.put(
 
 /**
  * @swagger
+ * /forgot-password/:id:
+ *   post:
+ *     summary: post registered email of that user in order to get reset password link via email 
+ *     tags:
+ *       - Auth
+ *     parameters:
+ *      - in: body
+ *        name: body
+ *        required: true
+ *        schema:
+ *          type: object
+ *          properties:
+ *            email:
+ *              type: string
+ *              required: true
+ *        description: post registered email of that user in order to get reset password link via email
+ *     responses:
+ *       200:
+ *         description: please check your email to reset your password
+ *       400:
+ *         description: something went wrong
+ */
+router.post('/forgot_password/:id', checkJwt, dtoValidation(UserForgotPasswordDto), forgotPassword)
+
+/**
+ * @swagger
  * /reset_pass:id:
  *   post:
  *     summary: click forgot pass and get token to the email address
@@ -191,10 +219,7 @@ router.put(
  *         schema:
  *           type: object
  *           properties:
- *             new password:
- *               type: string
- *             confirm password:
- *               type: string
+ *             
  *         description: User change password when forgot password
  *     responses:
  *       200:

@@ -54,7 +54,6 @@ export const deleteUserById = async (id: string): Promise<void> => {
   return;
 };
 
-
 // add photo to user
 // export const addPhotoToUser = async (photoId: string, user: User): Promise<User> => {
 //   const userRepository = getRepository(User);
@@ -65,8 +64,7 @@ export const deleteUserById = async (id: string): Promise<void> => {
 // }
 
 // add album to user
-// add album to user
-export const getAllPhotoOfAlbum = async (id: string): Promise<User[]> => {
+export const getAllALbumOfUser = async (id: string): Promise<User[]> => {
   const userRepository = getRepository(User);
   return await userRepository.find({
     relations: ['Album'],

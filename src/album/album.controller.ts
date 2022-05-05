@@ -125,7 +125,7 @@ export const albumDelete = async (
   }
 };
 
-export const getAlbumUser = async (
+export const addAlbumUser = async (
   req: Request,
   res: CustomResponse,
   next: NextFunction
@@ -150,3 +150,31 @@ export const getAlbumUser = async (
     next(error)
   }
 };
+
+export const getAllPhotoOfAnAlbum = async (req:Request, res:CustomResponse, next:NextFunction) => {
+  try {
+    const {id} = req.params;
+    const album = await albumService.findAlbumById(id)
+    if (!album) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `Album with id:${id} doesn't exists.`
+      );
+      return next(customError);
+    }
+    const rs = await albumService.getAllPhotoOfAlbum(id); // return be like [{a}, {b}, {c}]
+    if(!rs) {
+      const customError = new CustomError(
+        404,
+        'General',
+        `Album don't have any photo.`
+      );
+      return next(customError);
+    }
+    return res.customSuccess(200, 'User deleted.', rs);
+  } catch (error) {
+    next(error)
+  }
+}
+

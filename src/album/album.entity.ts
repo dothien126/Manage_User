@@ -49,16 +49,5 @@ export class Album extends BaseEntity{
   @ManyToMany((type) => User, {
     cascade: true,
   })
-  @JoinTable({
-    name: 'User_Album',
-    joinColumn: {
-      name: 'album',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'user',
-      referencedColumnName: 'id',
-    },
-  })
   users: User[];
 }

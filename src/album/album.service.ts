@@ -42,6 +42,7 @@ export const deleteAlbumById = async (id: string): Promise<void> => {
   return;
 };
 
+
 // get all photo of album
 export const getAllPhotoOfAlbum = async (id: string): Promise<Album[]> => {
   const albumRepository = getRepository(Album);

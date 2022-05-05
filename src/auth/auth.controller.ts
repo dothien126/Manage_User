@@ -294,7 +294,7 @@ export const forgotPassword = async (
       from: `${process.env.USER_MAIL}`,
       to: `dothien2601ak39@gmail.com, ${email}`,
       subject: 'Confirm Email Account',
-      html: `Please enter this link: <b>http://localhost:${process.env.PORT}/verify-email/${user.id}/${token}</b>`,
+      html: `Please enter this link: <b>http://localhost:${process.env.PORT}/reset_pass/${user.id}/${token}</b>`,
     };
 
     try {
